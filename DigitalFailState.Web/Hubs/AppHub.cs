@@ -36,6 +36,8 @@ namespace DigitalFailState.Web.Hubs
             Clients.All.SendAsync("SetScore", score);
             return base.OnConnectedAsync();
         }
+
+        public int Ping() => default(int);
     }
 
     public class ScoreProvider {

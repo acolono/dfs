@@ -49,6 +49,13 @@
         });
         function fullscreen(a) { a.requestFullScreen ? a.requestFullScreen() : a.mozRequestFullScreen ? a.mozRequestFullScreen() : a.webkitRequestFullScreen && a.webkitRequestFullScreen() };
         conn.start();
+
+        setInterval(() => {
+            conn.invoke("Ping").catch(e => {
+                alert("error: " + e);
+                location.reload(true);
+            });
+        },10000);
     </script>
 
 }

@@ -21,13 +21,16 @@ var vm = new Vue({
                     return goDownTo(score);
                 });
             }).then(() => {
-                return wait(1000);
+                return wait(3000);
             }).then(() => {
                 return a({ targets: con, opacity: 0 });
             }).then(() => {
                 return nextQuestion();
             }).then(() => {
                 return a({ targets: qyn, opacity: 1 });
+            }).catch((e) => {
+                alert("error: " + e);
+                location.reload(true);
             });
 
         },

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.IdentityModel.Logging;
 
 namespace DigitalFailState.Web.Hubs
 {
@@ -21,10 +22,13 @@ namespace DigitalFailState.Web.Hubs
             return _questionFactory.GetNextQuestion();
         }
 
-        public void WrongAnswer() {
+        public long WrongAnswer() {
             var newScore = _scoreProvider.GetNextScore();
-            Clients.All.SendAsync("SetScore", newScore);
+            Clients.Others.SendAsync("SetScore", newScore);
+            return newScore;
         }
+
+        public long GetScore() => _scoreProvider.GetScore();
 
         public override Task OnConnectedAsync() {
             var score = _scoreProvider.GetScore();

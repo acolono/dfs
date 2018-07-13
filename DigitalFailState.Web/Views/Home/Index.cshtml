@@ -1,32 +1,6 @@
-﻿<div id="app" v-cloak>
-    <pre v-on:click="wrong">{{question}}
-        score: {{score}}
-    </pre>
-</div>
-
-@section Scripts {
-    <script>
-        var conn = new signalR.HubConnectionBuilder().withUrl("/appHub").build();
-
-        var vm = new Vue({
-            el: '#app',
-            data: { question: '', score: 0 },
-            methods: {
-                wrong: () => {
-                    conn.invoke("WrongAnswer");
-                    NextQuestion();
-                }
-            }
-        });
-
-        function NextQuestion() {
-            conn.invoke("GetNextQuestion").then(q => { vm.question = q; });
-        }
-
-        conn.on("SetScore", s => { vm.score = s });
-
-        conn.start().then(() => {
-            NextQuestion();
-        });
-    </script>
-}
+﻿<app>
+    <conclusion style="opacity:0">{{conclusion}}<br>{{score}}</conclusion>
+    <question v-on:click="fullscreen">{{question}}</question>
+    <yes v-on:click="wrong('y')">Yes</yes>
+    <no v-on:click="wrong('n')">No</no>
+</app>

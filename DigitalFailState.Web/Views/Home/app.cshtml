@@ -1,6 +1,14 @@
-﻿<app>
+﻿@section Styles {
+    <link rel="stylesheet" href="~/css/app.css" asp-append-version="true" />
+}
+
+<app>
     <conclusion style="opacity:0">{{conclusion}}<br>{{score}}</conclusion>
     <question v-on:click="fullscreen">{{question}}</question>
     <yes v-on:click="wrong('y')">Yes</yes>
     <no v-on:click="wrong('n')">No</no>
 </app>
+
+@section Scripts {
+    <script src="~/js/app.js" asp-append-version="true"></script>
+}

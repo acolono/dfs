@@ -1,5 +1,7 @@
 ﻿<div id="app" v-cloak>
-    {{msg}}
+    <pre v-on:click="wrong">{{question}}
+        score: {{score}}
+    </pre>
 </div>
 
 @section Scripts {
@@ -8,15 +10,23 @@
 
         var vm = new Vue({
             el: '#app',
-            data: { msg: '' }
+            data: { question: '', score: 0 },
+            methods: {
+                wrong: () => {
+                    conn.invoke("WrongAnswer");
+                    NextQuestion();
+                }
+            }
         });
 
-        conn.on("NewConnection", m => {
-            console.log("NewConnection", m);
-        });
+        function NextQuestion() {
+            conn.invoke("GetNextQuestion").then(q => { vm.question = q; });
+        }
+
+        conn.on("SetScore", s => { vm.score = s });
 
         conn.start().then(() => {
-            conn.invoke("GetMessage").then(m => { vm.msg = m; });
+            NextQuestion();
         });
     </script>
 }

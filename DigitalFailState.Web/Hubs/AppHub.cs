@@ -18,6 +18,7 @@ namespace DigitalFailState.Web.Hubs
             _questionFactory = questionFactory;
             _scoreProvider = scoreProvider;
         }
+
         public QuestionModel GetNextQuestion() {
             return _questionFactory.GetNextQuestion();
         }

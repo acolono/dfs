@@ -37,8 +37,8 @@ var vm = new Vue({
     }
 });
 
-conn.on("SetScore", s => {
-    vm.score = s;
+conn.on("SetScore", score => {
+    goDownTo(score);
 });
 
 function nextQuestion() {

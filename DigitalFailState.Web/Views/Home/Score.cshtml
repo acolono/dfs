@@ -2,14 +2,17 @@
     <style>
         html, body {height: 100%; font-family: "Lucida Console", Monaco, monospace; font-size: 300%; background: #ccc}
         score {
+            height: 100%;
+            width: 100%;
             display: flex;
             justify-content: center;
+            align-items: center;
         }
     </style>
 }
 
 
-<score>
+<score v-on:click="fullscreen">
     score: {{score}}
 </score>
 
@@ -18,7 +21,12 @@
         var conn = new signalR.HubConnectionBuilder().withUrl("/appHub").build();
         var vm = new Vue({
             el: "score",
-            data: {score:0}
+            data: { score: 0 },
+            methods: {
+                fullscreen: () => {
+                    fullscreen(vm.$el);
+                }
+            }
         });
 
         function goDownTo(nr) {
@@ -35,9 +43,11 @@
         }
 
         conn.on("SetScore", score => {
-            goDownTo(score);
+            setTimeout(() => {
+                goDownTo(score);
+            },2000);
         });
-
+        function fullscreen(a) { a.requestFullScreen ? a.requestFullScreen() : a.mozRequestFullScreen ? a.mozRequestFullScreen() : a.webkitRequestFullScreen && a.webkitRequestFullScreen() };
         conn.start();
     </script>
 

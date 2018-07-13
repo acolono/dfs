@@ -1,0 +1,44 @@
+﻿@section Styles {
+    <style>
+        html, body {height: 100%; font-family: "Lucida Console", Monaco, monospace; font-size: 300%; background: #ccc}
+        score {
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+}
+
+
+<score>
+    score: {{score}}
+</score>
+
+@section Scripts {
+    <script>
+        var conn = new signalR.HubConnectionBuilder().withUrl("/appHub").build();
+        var vm = new Vue({
+            el: "score",
+            data: {score:0}
+        });
+
+        function goDownTo(nr) {
+            return new Promise(function (resolve, reject) {
+                var iv = setInterval(() => {
+                    if (vm.score > nr) {
+                        vm.score--;
+                    } else {
+                        clearInterval(iv);
+                        resolve();
+                    }
+                }, 15);
+            });
+        }
+
+        conn.on("SetScore", score => {
+            goDownTo(score);
+        });
+
+        conn.start();
+    </script>
+
+}

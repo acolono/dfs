@@ -1,4 +1,5 @@
 ﻿var conn = new signalR.HubConnectionBuilder().withUrl("/appHub").build();
+var animating = false;
 var vm = new Vue({
     el: 'app',
     data: {
@@ -8,6 +9,9 @@ var vm = new Vue({
     },
     methods: {
         wrong: (d) => {
+            if (animating) return;
+            animating = true;
+
             vm.conclusion = d === "y" ? vm.yesConclusion : vm.noConclusion;
             var qyn = vm.$el.querySelectorAll('question, yes, no');
             var con = vm.$el.querySelectorAll('conclusion');
@@ -31,6 +35,8 @@ var vm = new Vue({
             }).catch((e) => {
                 alert("error: " + e);
                 location.reload(true);
+            }).finally(() => {
+                animating = false;
             });
 
         },

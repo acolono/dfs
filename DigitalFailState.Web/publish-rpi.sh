@@ -1,2 +1,3 @@
 #!/bin/sh
-dotnet publish -r linux-arm -o bin/linux-arm-pub
+rm -rf bin/linux-arm-pub
+dotnet publish -r linux-arm -c Release -o bin/linux-arm-pub

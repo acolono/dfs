@@ -21,6 +21,7 @@ namespace DigitalFailState.Web
         public void ConfigureServices(IServiceCollection services) {
             services.AddSingleton<IQuestionProvider, QuestionFactory>();
             services.AddSingleton<ScoreProvider>();
+            services.AddSingleton<MqttService>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddSignalR();
         }

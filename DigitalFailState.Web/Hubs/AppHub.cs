@@ -9,10 +9,12 @@ namespace DigitalFailState.Web.Hubs
     {
         private readonly IQuestionProvider _questionProvider;
         private readonly ScoreProvider _scoreProvider;
+        private readonly MqttService _mqttService;
 
-        public AppHub(IQuestionProvider questionProvider, ScoreProvider scoreProvider) {
+        public AppHub(IQuestionProvider questionProvider, ScoreProvider scoreProvider, MqttService mqttService) {
             _questionProvider = questionProvider;
             _scoreProvider = scoreProvider;
+            _mqttService = mqttService;
         }
 
         public QuestionModel GetNextQuestion() {
@@ -21,6 +23,9 @@ namespace DigitalFailState.Web.Hubs
 
         public long WrongAnswer() {
             var newScore = _scoreProvider.GetNextScore();
+#pragma warning disable 4014 // we dont (a)wait because we dont care...
+            _mqttService.UpdateScoreSilentAsync(newScore);
+#pragma warning restore 4014
             Clients.Others.SendAsync("SetScore", newScore);
             return newScore;
         }

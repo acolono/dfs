@@ -1,0 +1,21 @@
+[Unit]
+Description=a web service
+
+[Service]
+Environment="ASPNETCORE_URLS=http://+:80"
+Environment="ASPNETCORE_ENVIRONMENT=RaspberryPi"
+WorkingDirectory=/home/pi/pub/
+ExecStart=/home/pi/pub/DigitalFailState.Web
+Restart=always
+RestartSec=10
+SyslogIdentifier=dotnet-web
+User=root
+
+[Install]
+WantedBy=multi-user.target
+
+## -- create service file
+#$ sudo nano /etc/systemd/system/web.service
+## -- enable and start the service
+#$ systemctl enable web.service
+#$ systemctl start web.service

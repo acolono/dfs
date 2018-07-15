@@ -8,9 +8,8 @@ using DigitalFailState.Web.Models;
 
 namespace DigitalFailState.Web.Controllers
 {
-    public class HomeController : Controller
-    {
-        public IActionResult Index() => RedirectToAction("App");
+    public class HomeController : Controller {
+        public IActionResult Index() => View();
 
         public IActionResult App() => View();
 

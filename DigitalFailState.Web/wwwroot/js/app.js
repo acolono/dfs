@@ -22,7 +22,7 @@ var vm = new Vue({
                 return conn.invoke("WrongAnswer");
             }).then((score) => {
                 return a({ targets: con, opacity: 1 }).then(() => {
-                    return goDownTo(score);
+                    return goDownTo(score, vm);
                 });
             }).then(() => {
                 return wait(3000);
@@ -33,7 +33,7 @@ var vm = new Vue({
             }).then(() => {
                 return a({ targets: qyn, opacity: 1 });
             }).catch((e) => {
-                alert("error: " + e);
+                alert(e);
                 location.reload(true);
             }).finally(() => {
                 animating = false;
@@ -41,13 +41,13 @@ var vm = new Vue({
 
         },
         fullscreen: () => {
-            fullscreen(document.body);
+            fullscreen();
         }
     }
 });
 
 conn.on("SetScore", score => {
-    goDownTo(score);
+    goDownTo(score, vm);
 });
 
 function nextQuestion() {
@@ -65,27 +65,17 @@ function a(opt) {
     return anime(opt).finished;
 }
 
-function goDownTo(nr) {
-    return new Promise(function (resolve, reject) {
-        var iv = setInterval(() => {
-            if (vm.score > nr) {
-                vm.score--;
-            } else {
-                clearInterval(iv);
-                resolve();
-            }
-        }, 15);
-    });
-}
-
-function wait(delay) {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => resolve(), delay);
-    });
-}
-
-function fullscreen(a) { a.requestFullScreen ? a.requestFullScreen() : a.mozRequestFullScreen ? a.mozRequestFullScreen() : a.webkitRequestFullScreen && a.webkitRequestFullScreen() };
-
 conn.start().then(() => {
     return nextQuestion();
-})
+}).then(() => {
+    return conn.invoke("GetScore");
+}).then((score) => {
+    vm.score = score;
+});
+
+setInterval(() => {
+    conn.invoke("Ping").catch(e => {
+        alert(e);
+        location.reload(true);
+    });
+}, 10000);

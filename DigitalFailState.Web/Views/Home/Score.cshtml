@@ -25,35 +25,26 @@
             data: { score: 0 },
             methods: {
                 fullscreen: () => {
-                    fullscreen(document.body);
+                    fullscreen();
                 }
             }
         });
 
-        function goDownTo(nr) {
-            return new Promise(function (resolve, reject) {
-                var iv = setInterval(() => {
-                    if (vm.score > nr) {
-                        vm.score--;
-                    } else {
-                        clearInterval(iv);
-                        resolve();
-                    }
-                }, 15);
-            });
-        }
-
         conn.on("SetScore", score => {
             setTimeout(() => {
-                goDownTo(score);
+                goDownTo(score, vm);
             },2000);
         });
-        function fullscreen(a) { a.requestFullScreen ? a.requestFullScreen() : a.mozRequestFullScreen ? a.mozRequestFullScreen() : a.webkitRequestFullScreen && a.webkitRequestFullScreen() };
-        conn.start();
+
+        conn.start().then(() => {
+            return conn.invoke("GetScore");
+        }).then((score) => {
+            vm.score = score;
+        });
 
         setInterval(() => {
             conn.invoke("Ping").catch(e => {
-                alert("error: " + e);
+                alert(e);
                 location.reload(true);
             });
         },10000);

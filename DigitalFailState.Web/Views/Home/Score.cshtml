@@ -1,6 +1,7 @@
 ﻿@section Styles {
     <style>
-        html, body {height: 100%; font-family: "Lucida Console", Monaco, monospace; font-size: 300%; background: #ccc}
+        html, body {height: 100%; width: 100%; font-family: "Lucida Console", Monaco, monospace; font-size: 300%; background: #ccc}
+        * {margin:0; padding:0; user-select: none;}
         score {
             height: 100%;
             width: 100%;
@@ -24,7 +25,7 @@
             data: { score: 0 },
             methods: {
                 fullscreen: () => {
-                    fullscreen(vm.$el);
+                    fullscreen(document.body);
                 }
             }
         });

@@ -41,7 +41,7 @@ var vm = new Vue({
 
         },
         fullscreen: () => {
-            fullscreen(vm.$el);
+            fullscreen(document.body);
         }
     }
 });

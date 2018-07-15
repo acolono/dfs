@@ -2,7 +2,7 @@
     <link rel="stylesheet" href="~/css/app.css" asp-append-version="true" />
 }
 
-<app>
+<app v-cloak>
     <conclusion style="opacity:0">{{conclusion}}<br/><br/>{{score}}</conclusion>
     <question v-on:click="fullscreen">{{question}}</question>
     <yes v-on:click="wrong('y')">Yes</yes>

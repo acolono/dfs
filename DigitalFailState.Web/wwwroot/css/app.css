@@ -1,4 +1,4 @@
-﻿html, body {height: 100%; font-family: "Lucida Console", Monaco, monospace; font-size: 150%; background: #ccc}
+﻿html, body {height: 100%; width: 100%; font-family: "Lucida Console", Monaco, monospace; font-size: 150%; background: #ccc}
 * {margin:0; padding:0; user-select: none;}
 [v-cloak] {display: none}
 

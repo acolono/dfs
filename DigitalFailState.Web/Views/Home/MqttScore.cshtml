@@ -17,7 +17,9 @@ score: <span id="score"></span>
     });
     client.on('message', function(topic, message, pkg) {
         var score = parseInt(message.toString());
-        document.getElementById('score').innerHTML = score;
+        if (!isNaN(score) && isFinite(score)) {
+            document.getElementById('score').innerHTML = score;
+        }
     });
 </script>
 </body>

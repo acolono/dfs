@@ -1,4 +1,5 @@
-﻿using DigitalFailState.Web.Models;
+﻿using System.Threading.Tasks;
+using DigitalFailState.Web.Models;
 using DigitalFailState.Web.Services;
 using Microsoft.AspNetCore.SignalR;
 
@@ -21,12 +22,10 @@ namespace DigitalFailState.Web.Hubs
             return _questionProvider.GetNextQuestion();
         }
 
-        public long WrongAnswer() {
+        public async Task<long> WrongAnswer() {
             var newScore = _scoreProvider.GetNextScore();
-#pragma warning disable 4014 // we dont (a)wait because we dont care...
-            _mqttService.UpdateScoreSilentAsync(newScore);
-#pragma warning restore 4014
-            Clients.Others.SendAsync("SetScore", newScore);
+            await _mqttService.UpdateScoreSilentAsync(newScore);
+            await Clients.Others.SendAsync("SetScore", newScore);
             return newScore;
         }
 

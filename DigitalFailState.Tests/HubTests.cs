@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Net.WebSockets;
 using System.Threading.Tasks;
 using DigitalFailState.Web;
@@ -21,9 +22,7 @@ namespace DigitalFailState.Tests
             var builder = WebHost.CreateDefaultBuilder().UseStartup<Startup>();
             return new TestServer(builder);
         }
-        private static HubConnection GetHub(Uri url) {
-
-            var handler = GetServer().CreateHandler();
+        private static HubConnection GetHub(HttpMessageHandler handler, Uri url) {
 
             var hubConnection = new HubConnectionBuilder()
                                .WithUrl(url, HttpTransportType.LongPolling, o => {
@@ -37,13 +36,19 @@ namespace DigitalFailState.Tests
 
         [Test]
         public async Task WrongAnswerDecreasesScore() {
-            var conn = GetHub(new Uri("http://test/appHub"));
+            var server = GetServer();
+            var handler = server.CreateHandler();
+            var client = server.CreateClient();
+            var hubUrl = new Uri("http://test/appHub");
+
+            var conn = GetHub(handler, hubUrl);
+            var connOther = GetHub(handler, hubUrl);
             try {
 
-                //TODO: callbacks with testhost
-                //long? score = null;
-                //conn.On<long>("SetScore", s => { score = s; });
+                long? otherScore = null;
+                connOther.On<long>("SetScore", s => { otherScore = s; });
 
+                await connOther.StartAsync();
                 await conn.StartAsync();
                 
                 var pong = await conn.InvokeAsync<int>("Ping");
@@ -58,11 +63,15 @@ namespace DigitalFailState.Tests
 
                 Assert.IsTrue(score1 > score2 && score2 < 0);
 
-                //await Task.Delay(1000);
-                //Assert.IsTrue(score.HasValue && score == score2);
+                var legacyScoreString = await client.GetStringAsync("/score/legacy");
+                Assert.IsTrue(legacyScoreString.Contains($"{score2}"));
+
+                await Task.Delay(500);
+                Assert.IsTrue(otherScore.HasValue && otherScore == score2);
 
             } finally {
                 await conn.DisposeAsync();
+                await connOther.DisposeAsync();
             }
         }
     }

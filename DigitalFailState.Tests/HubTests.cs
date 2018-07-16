@@ -18,10 +18,6 @@ namespace DigitalFailState.Tests
     [TestFixture]
     public class HubTests
     {
-        private static TestServer GetServer() {
-            var builder = WebHost.CreateDefaultBuilder().UseStartup<Startup>();
-            return new TestServer(builder);
-        }
         private static HubConnection GetHub(HttpMessageHandler handler, Uri url) {
 
             var hubConnection = new HubConnectionBuilder()
@@ -36,7 +32,7 @@ namespace DigitalFailState.Tests
 
         [Test]
         public async Task WrongAnswerDecreasesScore() {
-            var server = GetServer();
+            var server = HttpTests.GetServer();
             var handler = server.CreateHandler();
             var client = server.CreateClient();
             var hubUrl = new Uri("http://test/appHub");

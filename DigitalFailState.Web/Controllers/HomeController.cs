@@ -16,22 +16,22 @@ namespace DigitalFailState.Web.Controllers
             _scoreProvider = scoreProvider;
         }
 
+        [HttpGet("/")]
         public IActionResult Index() => View();
 
+        [HttpGet("/app")]
         public IActionResult App() => View();
 
+        [HttpGet("/score")]
         public IActionResult Score() => View();
 
+        [HttpGet("/score/legacy")]
         public IActionResult LegacyScore() {
             ViewBag.Score = _scoreProvider.GetScore();
             return View();
         }
 
+        [HttpGet("/score/mqtt")]
         public IActionResult MqttScore() => View();
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error() {
-            return View(new ErrorViewModel {RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier});
-        }
     }
 }

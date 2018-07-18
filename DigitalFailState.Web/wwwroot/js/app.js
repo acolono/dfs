@@ -68,12 +68,17 @@ conn.on("SetScore", score => {
 
 function nextQuestion() {
     return conn.invoke("GetNextQuestion").then(q => {
+        vm.id = q.id;
         vm.question = q.question;
         vm.yesConclusion = q.yesConclusion;
         vm.noConclusion = q.noConclusion;
         return Promise.resolve();
     });
 }
+
+conn.on("GetActiveQuestionId", () => {
+    return vm.id;
+});
 
 function a(opt) {
     opt.easing = opt.easing || 'linear';
@@ -122,6 +127,6 @@ setInterval(() => {
 
 setInterval(() => {
     var chance = anime.random(0, 100);
-    if (chance > 5) return;
+    if (chance > 2) return;
     flick();
 },1500);

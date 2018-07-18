@@ -4,6 +4,7 @@
 
 <app v-cloak>
     <conclusion style="opacity:0">{{conclusion}}<br/><br/>{{score}}</conclusion>
+    <score style="opacity:0">{{score}}</score>
     <question v-on:click="fullscreen">{{question}}</question>
     <yes v-on:click="wrong('y')">Yes</yes>
     <no v-on:click="wrong('n')">No</no>

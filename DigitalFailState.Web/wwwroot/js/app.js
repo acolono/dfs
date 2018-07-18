@@ -47,7 +47,23 @@ var vm = new Vue({
 });
 
 conn.on("SetScore", score => {
-    goDownTo(score, vm);
+    if (animating) return;
+    animating = true;
+    var qyn = vm.$el.querySelectorAll('question, yes, no');
+    var sco = vm.$el.querySelectorAll('score');
+    a({ targets: qyn, opacity: 0, duration: 1000 }).then(() => {
+        return a({ targets: sco, opacity: 1, duration: 1000 });
+    }).then(() => {
+        return goDownTo(score, vm);
+    }).then(() => {
+        return wait(3000);
+    }).then(() => {
+        return a({ targets: sco, opacity: 0 });
+    }).then(() => {
+        return a({ targets: qyn, opacity: 1 });
+    }).finally(() => {
+        animating = false;
+    });
 });
 
 function nextQuestion() {
@@ -65,6 +81,30 @@ function a(opt) {
     return anime(opt).finished;
 }
 
+function flick() {
+    if (animating) return;
+    animating = true;
+
+    var app = vm.$el;
+    var body = document.body;
+
+    var oldBodybackgroundColor = body.style.backgroundColor;
+    var oldBodyColor = body.style.color;
+
+    body.style.backgroundColor = "black";
+    body.style.color = "lime";
+
+    a({ targets: app, opacity: 0, direction: 'rtl', duration: 100 }).then(() => {
+        return a({ targets: app, opacity: 1, direction: 'ltr', duration: 100 });
+    }).finally(() => {
+        body.style.backgroundColor = oldBodybackgroundColor;
+        body.style.color = oldBodyColor;
+        animating = false;
+    });
+}
+
+conn.on("Flick", flick);
+
 conn.start().then(() => {
     return nextQuestion();
 }).then(() => {
@@ -79,3 +119,9 @@ setInterval(() => {
         location.reload(true);
     });
 }, 10000);
+
+setInterval(() => {
+    var chance = anime.random(0, 100);
+    if (chance > 5) return;
+    flick();
+},1500);

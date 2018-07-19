@@ -76,10 +76,6 @@ function nextQuestion() {
     });
 }
 
-conn.on("GetActiveQuestionId", () => {
-    return vm.id;
-});
-
 function a(opt) {
     opt.easing = opt.easing || 'linear';
     opt.duration = opt.duration || 2000;
@@ -126,7 +122,7 @@ setInterval(() => {
 }, 10000);
 
 setInterval(() => {
-    var chance = anime.random(0, 100);
-    if (chance > 2) return;
+    var chance = anime.random(0, 1000);
+    if (chance > 5) return;
     flick();
 },1500);

@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using DigitalFailState.Web.Hubs;
 using Microsoft.AspNetCore.Mvc;
 using DigitalFailState.Web.Models;
 using DigitalFailState.Web.Services;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace DigitalFailState.Web.Controllers
 {
@@ -17,7 +20,13 @@ namespace DigitalFailState.Web.Controllers
         }
 
         [HttpGet("/")]
-        public IActionResult Index() => View();
+        public IActionResult Index() {
+            lock (AppHub.ActiveQuestions) {
+                var t = AppHub.ActiveQuestions.Select(q => new {connectionId = q.Key, questionId = q.Value});
+                ViewBag.questions = JToken.FromObject(t).ToString(Formatting.Indented);
+            }
+            return View();
+        }
 
         [HttpGet("/app")]
         public IActionResult App() => View();

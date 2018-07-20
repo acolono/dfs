@@ -15,7 +15,7 @@ namespace DigitalFailState.Web.Hubs
         private readonly IQuestionProvider _questionProvider;
         private readonly ScoreProvider _scoreProvider;
         private readonly MqttService _mqttService;
-        private static readonly IDictionary<string, int> ActiveQuestions = new Dictionary<string, int>();
+        public static readonly IDictionary<string, int> ActiveQuestions = new Dictionary<string, int>();
 
         public AppHub(IQuestionProvider questionProvider, ScoreProvider scoreProvider, MqttService mqttService) {
             _questionProvider = questionProvider;

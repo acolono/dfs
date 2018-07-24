@@ -26,15 +26,16 @@ app {
     }
 }
 
-yes, no, question, conclusion, score {
+yes, no, question, conclusion, score, error {
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
 }
-conclusion, score {pointer-events: none}
+conclusion, score, error {pointer-events: none}
 
 yes {grid-area: yes; background: green}
 no {grid-area: no; background: red}
 question {grid-area: question}
-conclusion, score {grid-area: 1/1/3/3}
+error { background: red; color: white;}
+conclusion, score, error {grid-area: 1/1/3/3}

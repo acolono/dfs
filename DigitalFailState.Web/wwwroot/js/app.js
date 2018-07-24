@@ -33,8 +33,7 @@ var vm = new Vue({
             }).then(() => {
                 return a({ targets: qyn, opacity: 1 });
             }).catch((e) => {
-                alert(e);
-                location.reload(true);
+                document.querySelector("error").style.opacity = 1;
             }).finally(() => {
                 animating = false;
             });
@@ -60,6 +59,7 @@ conn.on("SetScore", score => {
     }).then(() => {
         return a({ targets: sco, opacity: 0 });
     }).then(() => {
+        animating = false;
         return a({ targets: qyn, opacity: 1 });
     }).finally(() => {
         animating = false;
@@ -115,14 +115,9 @@ conn.start().then(() => {
 });
 
 setInterval(() => {
-    conn.invoke("Ping").catch(e => {
-        alert(e);
-        location.reload(true);
-    });
-}, 10000);
-
-setInterval(() => {
     var chance = anime.random(0, 1000);
     if (chance > 5) return;
     flick();
-},1500);
+}, 1500);
+
+setupPing(conn);

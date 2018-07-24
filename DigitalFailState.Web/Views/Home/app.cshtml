@@ -2,13 +2,14 @@
     <link rel="stylesheet" href="~/css/app.css" asp-append-version="true" />
 }
 
-<app v-cloak>
-    <conclusion style="opacity:0">{{conclusion}}<br/><br/>{{score}}</conclusion>
-    <score style="opacity:0">{{score}}</score>
-    <question v-on:click="fullscreen">{{question}}</question>
-    <yes v-on:click="wrong('y')">Yes</yes>
-    <no v-on:click="wrong('n')">No</no>
-</app>
+    <app v-cloak>
+        <conclusion style="opacity: 0">{{conclusion}}<br /><br />{{score}}</conclusion>
+        <score style="opacity: 0">{{score}}</score>
+        <question v-on:click="fullscreen">{{question}}</question>
+        <yes v-on:click="wrong('y')">Yes</yes>
+        <no v-on:click="wrong('n')">No</no>
+        <error style="opacity: 0"><div>Error<br /><small>restarting, please stand by...</small></div></error>
+    </app>
 
 @section Scripts {
     <script src="~/js/app.js" asp-append-version="true"></script>

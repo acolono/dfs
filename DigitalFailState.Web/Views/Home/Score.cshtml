@@ -1,6 +1,6 @@
 ﻿@section Styles {
     <style>
-        html, body {height: 100%; width: 100%; font-family: "Lucida Console", Monaco, monospace; font-size: 300%; background: #ccc}
+        html, body {height: 100%; width: 100%; font-family: "Lucida Console", Monaco, monospace; font-size: 200%; background: #ccc}
         * {margin:0; padding:0; user-select: none;}
         score {
             height: 100%;
@@ -42,12 +42,7 @@
             vm.score = score;
         });
 
-        setInterval(() => {
-            conn.invoke("Ping").catch(e => {
-                alert(e);
-                location.reload(true);
-            });
-        },10000);
+        setupPing(conn);
     </script>
 
 }

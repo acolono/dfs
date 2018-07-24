@@ -1,4 +1,5 @@
-﻿using DigitalFailState.Web.Hubs;
+﻿using DigitalFailState.Web.HostedServices;
+using DigitalFailState.Web.Hubs;
 using DigitalFailState.Web.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -24,6 +25,7 @@ namespace DigitalFailState.Web
             services.AddSingleton<MqttService>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddSignalR();
+            services.AddHostedService<WatchDog>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

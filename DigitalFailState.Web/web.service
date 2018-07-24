@@ -4,10 +4,12 @@ Description=a web service
 [Service]
 Environment="ASPNETCORE_URLS=http://+:80"
 Environment="ASPNETCORE_ENVIRONMENT=RaspberryPi"
+Environment="DOTNET_CLI_TELEMETRY_OPTOUT=1"
 WorkingDirectory=/home/pi/pub/
 ExecStart=/home/pi/pub/DigitalFailState.Web
 Restart=always
 RestartSec=10
+WatchdogSec=30
 SyslogIdentifier=dotnet-web
 User=root
 

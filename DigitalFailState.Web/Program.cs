@@ -7,6 +7,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Tmds.Systemd;
 
 namespace DigitalFailState.Web
 {
@@ -14,6 +15,7 @@ namespace DigitalFailState.Web
     {
         public static void Main(string[] args)
         {
+            var systemD = ServiceManager.Notify(ServiceState.Status("Initializing"));
             CreateWebHostBuilder(args).Build().Run();
         }
 

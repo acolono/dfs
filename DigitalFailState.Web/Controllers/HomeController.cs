@@ -20,13 +20,7 @@ namespace DigitalFailState.Web.Controllers
         }
 
         [HttpGet("/")]
-        public IActionResult Index() {
-            lock (AppHub.ActiveQuestions) {
-                var t = AppHub.ActiveQuestions.Select(q => new {connectionId = q.Key, questionId = q.Value});
-                ViewBag.questions = JToken.FromObject(t).ToString(Formatting.Indented);
-            }
-            return View();
-        }
+        public IActionResult Index() => View();
 
         [HttpGet("/app")]
         public IActionResult App() => View();

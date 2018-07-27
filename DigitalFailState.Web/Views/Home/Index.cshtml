@@ -1,4 +1,9 @@
-﻿<ul>
+﻿@using DigitalFailState.Web.Hubs
+@{
+    var ci = AppHub.GetLastClientActivity();
+}
+
+<ul>
     <li><a asp-action="App">app</a></li>
     <li><a asp-action="Score">score</a></li>
     <li><a asp-action="LegacyScore">legacy score</a></li>
@@ -11,4 +16,7 @@
     </style>
 }
 
-<pre>@ViewBag.questions</pre>
+<pre>@ci.questionsJson</pre>
+<pre>@ci.clientInfo</pre>
+
+<p>idle since: @ci.inactiveTimeSpan</p>

@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using CsvHelper;
+using CsvHelper.Configuration;
 using DigitalFailState.Web.Models;
 
 namespace DigitalFailState.Web.Services
@@ -14,15 +18,37 @@ namespace DigitalFailState.Web.Services
         private static readonly ImmutableList<QuestionModel> Questions = StaticQuestionFactory.Init();
 
         private static ImmutableList<QuestionModel> Init() {
-            // TODO: read from csv/etc...
-            var qf = new QuestionFactory();
-            return Enumerable.Range(1, 20).Select(qf.GetQuestionById).ToImmutableList();
+            var cfg = new Configuration() {
+                Encoding = Encoding.UTF8,
+                HasHeaderRecord = false,
+                Delimiter = ",",
+                Quote = '"',
+            };
+
+            var qm = new List<QuestionModel>();
+            var id = 1;
+
+            using (var fs = File.OpenRead("questions.csv")) 
+            using (var sr = new StreamReader(fs,cfg.Encoding)) {
+                var cr = new CsvReader(sr, cfg);
+                while (cr.Read()) {
+                    qm.Add(new QuestionModel {
+                        Id = id++,
+                        Question = cr.GetField<string>(0),
+                        YesConclusion = cr.GetField<string>(1),
+                        NoConclusion = cr.GetField<string>(2),
+                    });
+                }
+            }
+
+            return qm.ToImmutableList();
         }
 
         public QuestionModel GetNextQuestion() {
             lock (Sync) {
+                var lastId = Questions.Max(q => q.Id);
                 _questionId++;
-                if (_questionId >= 20) _questionId = 1;
+                if (_questionId > lastId) _questionId = 1;
                 return GetQuestionById(_questionId);
             }
         }

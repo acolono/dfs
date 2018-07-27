@@ -33,7 +33,7 @@
         conn.on("SetScore", score => {
             setTimeout(() => {
                 goDownTo(score, vm);
-            },2000);
+            },4000);
         });
 
         conn.start().then(() => {

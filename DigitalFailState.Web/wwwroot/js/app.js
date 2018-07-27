@@ -26,7 +26,7 @@ var vm = new Vue({
                     return goDownTo(score, vm);
                 });
             }).then(() => {
-                return wait(3000);
+                return wait(6000);
             }).then(() => {
                 return a({ targets: con, opacity: 0 });
             }).then(() => {
@@ -56,7 +56,7 @@ conn.on("SetScore", score => {
     }).then(() => {
         return goDownTo(score, vm);
     }).then(() => {
-        return wait(3000);
+        return wait(6000);
     }).then(() => {
         return a({ targets: sco, opacity: 0 });
     }).then(() => {
@@ -78,7 +78,7 @@ function nextQuestion() {
 
 function a(opt) {
     opt.easing = opt.easing || 'linear';
-    opt.duration = opt.duration || 2000;
+    opt.duration = opt.duration || 500;
     return anime(opt).finished;
 }
 

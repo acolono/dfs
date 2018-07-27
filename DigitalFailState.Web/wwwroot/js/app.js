@@ -16,12 +16,13 @@ var vm = new Vue({
             var qyn = vm.$el.querySelectorAll('question, yes, no');
             var con = vm.$el.querySelectorAll('conclusion');
 
-            a({
-                targets: qyn, opacity: 0
-            }).then(() => {
-                return conn.invoke("WrongAnswer");
-            }).then((score) => {
-                return a({ targets: con, opacity: 1 }).then(() => {
+
+            conn.invoke("WrongAnswer").then((score) => {
+                return a({
+                    targets: qyn, opacity: 0
+                }).then(() => {
+                    return a({ targets: con, opacity: 1 });
+                }).then(() => {
                     return goDownTo(score, vm);
                 });
             }).then(() => {
@@ -50,8 +51,8 @@ conn.on("SetScore", score => {
     animating = true;
     var qyn = vm.$el.querySelectorAll('question, yes, no');
     var sco = vm.$el.querySelectorAll('score');
-    a({ targets: qyn, opacity: 0, duration: 1000 }).then(() => {
-        return a({ targets: sco, opacity: 1, duration: 1000 });
+    a({ targets: qyn, opacity: 0 }).then(() => {
+        return a({ targets: sco, opacity: 1 });
     }).then(() => {
         return goDownTo(score, vm);
     }).then(() => {
@@ -59,7 +60,6 @@ conn.on("SetScore", score => {
     }).then(() => {
         return a({ targets: sco, opacity: 0 });
     }).then(() => {
-        animating = false;
         return a({ targets: qyn, opacity: 1 });
     }).finally(() => {
         animating = false;

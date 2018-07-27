@@ -119,10 +119,10 @@ conn.start().then(() => {
     vm.score = score;
 });
 
-setInterval(() => {
-    var chance = anime.random(0, 1000);
-    if (chance > 5) return;
-    flick();
-}, 1500);
+//setInterval(() => {
+//    var chance = anime.random(0, 1000);
+//    if (chance > 5) return;
+//    flick();
+//}, 1500);
 
 setupPing(conn);

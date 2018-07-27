@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using DigitalFailState.Web.Hubs;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Tmds.Systemd;
@@ -28,7 +29,7 @@ namespace DigitalFailState.Web.HostedServices
             }
             var watchdogUsecStr = Environment.GetEnvironmentVariable("WATCHDOG_USEC");
             if (!string.IsNullOrWhiteSpace(watchdogUsecStr) && long.TryParse(watchdogUsecStr, out var watchdogUsec)) {
-                var watchdogMsec = watchdogUsec / 1000L - 10L;
+                var watchdogMsec = watchdogUsec / 2000L;
                 _timer = new Timer(PingSystemD, null, 0, watchdogMsec);
             }
             else {
@@ -38,16 +39,28 @@ namespace DigitalFailState.Web.HostedServices
         }
 
         private void PingSystemD(object state) {
-            ServiceManager.Notify(ServiceState.Watchdog);
+            var ci = AppHub.GetLastClientActivity();
+            if (ci.inactiveTimeSpan > TimeSpan.FromMinutes(5)) {
+                _logger.LogWarning($"no client activity: for={ci.inactiveTimeSpan}, since={ci.lastActivity}");
+            }
+            else {
+                ServiceManager.Notify(ServiceState.Watchdog);    
+            }
         }
 
         public Task StopAsync(CancellationToken cancellationToken) {
             ServiceManager.Notify(ServiceState.Stopping);
+            Stop();
             return Task.CompletedTask;
         }
 
-        public void Dispose() {
+        private void Stop() {
             _timer?.Dispose();
+            _timer = null;
+        }
+
+        public void Dispose() {
+            Stop();
         }
     }
 }

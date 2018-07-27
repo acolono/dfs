@@ -16,6 +16,11 @@ var vm = new Vue({
             var qyn = vm.$el.querySelectorAll('question, yes, no');
             var con = vm.$el.querySelectorAll('conclusion');
 
+            var clickedEl = vm.$el.querySelectorAll(d === "y" ? "yes" : "no");
+
+            a({ targets: clickedEl, opacity: 0.5, duration: 100 }).then(() => {
+                return a({ targets: clickedEl, opacity: 1, duration: 100 });
+            });
 
             conn.invoke("WrongAnswer").then((score) => {
                 return a({

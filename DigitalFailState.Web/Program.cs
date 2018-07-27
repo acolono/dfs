@@ -15,7 +15,6 @@ namespace DigitalFailState.Web
     {
         public static void Main(string[] args)
         {
-            var systemD = ServiceManager.Notify(ServiceState.Status("Initializing"));
             CreateWebHostBuilder(args).Build().Run();
         }
 

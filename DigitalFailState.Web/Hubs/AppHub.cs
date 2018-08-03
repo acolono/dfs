@@ -18,15 +18,13 @@ namespace DigitalFailState.Web.Hubs
     {
         private readonly IQuestionProvider _questionProvider;
         private readonly ScoreProvider _scoreProvider;
-        private readonly MqttService _mqttService;
 
         private static readonly IDictionary<string, int> ActiveQuestions = new Dictionary<string, int>();
         private static long _lastClientActivity = DateTime.Now.Ticks;
 
-        public AppHub(IQuestionProvider questionProvider, ScoreProvider scoreProvider, MqttService mqttService) {
+        public AppHub(IQuestionProvider questionProvider, ScoreProvider scoreProvider) {
             _questionProvider = questionProvider;
             _scoreProvider = scoreProvider;
-            _mqttService = mqttService;
         }
 
         public QuestionModel GetNextQuestion() {
@@ -51,7 +49,6 @@ namespace DigitalFailState.Web.Hubs
 
         public async Task<long> WrongAnswer() {
             var newScore = _scoreProvider.GetNextScore();
-            await _mqttService.UpdateScoreSilentAsync(newScore);
             await Clients.Others.SendAsync("SetScore", newScore);
             return newScore;
         }

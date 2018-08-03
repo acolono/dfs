@@ -33,8 +33,5 @@ namespace DigitalFailState.Web.Controllers
             ViewBag.Score = _scoreProvider.GetScore();
             return View();
         }
-
-        [HttpGet("/score/mqtt")]
-        public IActionResult MqttScore() => View();
     }
 }

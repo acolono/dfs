@@ -18,8 +18,8 @@ var vm = new Vue({
 
             var clickedEl = vm.$el.querySelectorAll(d === "y" ? "yes" : "no");
 
-            a({ targets: clickedEl, opacity: 0.5, duration: 100 }).then(() => {
-                return a({ targets: clickedEl, opacity: 1, duration: 100 });
+            a({ targets: clickedEl, zoom: 2, duration: 100 }).then(() => {
+                return a({ targets: clickedEl, zoom: 1, duration: 100 });
             });
 
             conn.invoke("WrongAnswer").then((score) => {

@@ -22,7 +22,6 @@ namespace DigitalFailState.Tests
         [TestCase("/app")]
         [TestCase("/score")]
         [TestCase("/score/legacy")]
-        [TestCase("/score/mqtt")]
         public async Task CanServe(string url) {
             var client = GetServer().CreateClient();
             var response = await client.GetAsync(url);

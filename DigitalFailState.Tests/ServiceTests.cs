@@ -20,7 +20,8 @@ namespace DigitalFailState.Tests
 
         [Test]
         public void ScoreProvider() {
-            var sp = new ScoreProvider();
+            var ss = new StorageService();
+            var sp = new ScoreProvider(ss);
             var next = sp.GetNextScore();
             Assert.AreEqual(next, sp.GetScore());
         }

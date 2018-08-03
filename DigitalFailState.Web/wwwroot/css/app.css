@@ -31,6 +31,7 @@ yes, no, question, conclusion, score, error {
     justify-content: center;
     align-items: center;
     text-align: center;
+    padding: 1rem;
 }
 conclusion, score, error {pointer-events: none}
 

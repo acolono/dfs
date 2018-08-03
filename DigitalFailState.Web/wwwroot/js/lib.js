@@ -49,4 +49,8 @@ function setupPing(conn) {
             start();
         });
     }, 10000);
+
+    conn.on("Restart", () => {
+        window.location.reload(true);
+    });
 }

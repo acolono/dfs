@@ -1,14 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using DigitalFailState.Web.Hubs;
-using Microsoft.AspNetCore.Mvc;
-using DigitalFailState.Web.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 using DigitalFailState.Web.Services;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace DigitalFailState.Web.Controllers
 {

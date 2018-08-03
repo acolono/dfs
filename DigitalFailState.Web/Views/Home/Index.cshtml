@@ -7,6 +7,7 @@
     <li><a asp-action="App">app</a></li>
     <li><a asp-action="Score">score</a></li>
     <li><a asp-action="LegacyScore">legacy score</a></li>
+    <li><a asp-action="Restart" asp-controller="Api">restart clients</a></li>
 </ul>
 
 @section Styles {
@@ -15,7 +16,7 @@
     </style>
 }
 
-<pre>@ci.questionsJson</pre>
+<pre>@Html.Raw(ci.questionsJson)</pre>
 <pre>@ci.clientInfo</pre>
 
 <p>idle since: @ci.inactiveTimeSpan</p>

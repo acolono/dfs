@@ -125,4 +125,4 @@ conn.start().then(() => {
 //    flick();
 //}, 1500);
 
-setupPing(conn);
+setupPing(conn, vm);

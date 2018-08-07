@@ -55,8 +55,15 @@ namespace DigitalFailState.Web.Hubs
 
         public long GetScore() => _scoreProvider.GetScore();
 
-        public int Ping() {
+        public int Ping(int questionId = -1) {
             ClientActivity();
+
+            if (questionId > 0) {
+                lock (ActiveQuestions) {
+                    ActiveQuestions[Context.ConnectionId] = questionId;
+                }
+            }
+
             return default(int);
         }
 

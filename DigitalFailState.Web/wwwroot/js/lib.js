@@ -25,7 +25,7 @@ function wait(delay) {
 }
 
 
-function setupPing(conn) {
+function setupPing(conn, vm) {
 
     var error = document.querySelector("error") || document.createElement("div");
 
@@ -42,7 +42,9 @@ function setupPing(conn) {
     });
 
     setInterval(() => {
-        conn.invoke("Ping").then(i => {
+        var questionId = -1;
+        if (vm && vm.id) questionId = vm.id;
+        conn.invoke("Ping", questionId).then(i => {
             error.style.opacity = 0;
         }).catch(e => {
             error.style.opacity = 1;

@@ -14,7 +14,7 @@ function goDownTo(nr, vm) {
                 clearInterval(iv);
                 resolve();
             }
-        }, 15);
+        }, 60);
     });
 }
 

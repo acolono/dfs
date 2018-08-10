@@ -13,6 +13,8 @@ var vm = new Vue({
             animating = true;
 
             vm.conclusion = d === "y" ? vm.yesConclusion : vm.noConclusion;
+            typeLetters(vm.conclusion, vm, 'conclusion');
+
             var qyn = vm.$el.querySelectorAll('question, yes, no');
             var con = vm.$el.querySelectorAll('conclusion');
 
@@ -77,6 +79,7 @@ function nextQuestion() {
         vm.question = q.question;
         vm.yesConclusion = q.yesConclusion;
         vm.noConclusion = q.noConclusion;
+        typeLetters(vm.question, vm, 'question');
         return Promise.resolve();
     });
 }

@@ -14,7 +14,26 @@ function goDownTo(nr, vm) {
                 clearInterval(iv);
                 resolve();
             }
-        }, 60);
+        }, 120);
+    });
+}
+
+function typeLetters(text, vm, property) {
+    return new Promise(function (resolve, reject) {
+        vm[property] = "";
+        var letters = text.split("");
+        var state = "";
+        var iv = setInterval(() => {
+            var nextLetter = letters.shift();
+            if (nextLetter === undefined) {
+                vm[property] = text;
+                clearInterval(iv);
+                resolve();
+            } else {
+                state += nextLetter;
+                vm[property] = state + "|";
+            }
+        }, 30);
     });
 }
 

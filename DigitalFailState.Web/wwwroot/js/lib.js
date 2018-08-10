@@ -25,7 +25,7 @@ function typeLetters(text, vm, property) {
         var state = "";
         var iv = setInterval(() => {
             var nextLetter = letters.shift();
-            if (nextLetter === undefined || letters.length < 1) {
+            if (letters.length < 3) {
                 vm[property] = text;
                 clearInterval(iv);
                 resolve();
@@ -33,7 +33,7 @@ function typeLetters(text, vm, property) {
                 state += nextLetter;
                 vm[property] = state + "|";
             }
-        }, 30);
+        }, 35);
     });
 }
 

@@ -12,8 +12,8 @@ var vm = new Vue({
             if (animating) return;
             animating = true;
 
-            vm.conclusion = d === "y" ? vm.yesConclusion : vm.noConclusion;
-            typeLetters(vm.conclusion, vm, 'conclusion');
+            var conclusion = d === "y" ? vm.yesConclusion : vm.noConclusion;
+            vm.conclusion = "";
 
             var qyn = vm.$el.querySelectorAll('question, yes, no');
             var con = vm.$el.querySelectorAll('conclusion');
@@ -28,6 +28,7 @@ var vm = new Vue({
                 return a({
                     targets: qyn, opacity: 0
                 }).then(() => {
+                    typeLetters(conclusion, vm, 'conclusion');
                     return a({ targets: con, opacity: 1 });
                 }).then(() => {
                     return goDownTo(score, vm);

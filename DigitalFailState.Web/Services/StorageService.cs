@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Text;
-using System.Threading.Tasks;
-using System.Threading.Tasks.Dataflow;
 
 namespace DigitalFailState.Web.Services
 {
@@ -19,8 +14,13 @@ namespace DigitalFailState.Web.Services
         private const string ScoreFile = "score.txt";
 
         public void SaveStore(long score) {
-            lock (Sync) {
-                File.WriteAllText(ScoreFile, score.ToString(), Encoding.UTF8);
+            try {
+                lock (Sync) {
+                    File.WriteAllText(ScoreFile, score.ToString(), Encoding.UTF8);
+                }
+            }
+            catch (IOException) {
+                // my bad...
             }
         }
 

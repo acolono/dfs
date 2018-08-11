@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using CsvHelper;
 using CsvHelper.Configuration;
 using DigitalFailState.Web.Models;
+using Microsoft.Extensions.FileProviders;
 
 namespace DigitalFailState.Web.Services
 {
@@ -15,7 +17,7 @@ namespace DigitalFailState.Web.Services
     {
         private static readonly object Sync = new object();
         private static int _questionId = 0;
-        private static readonly ImmutableList<QuestionModel> Questions = StaticQuestionFactory.Init();
+        private static readonly ImmutableList<QuestionModel> Questions = Init();
 
         private static ImmutableList<QuestionModel> Init() {
             var cfg = new Configuration() {
@@ -28,7 +30,10 @@ namespace DigitalFailState.Web.Services
             var qm = new List<QuestionModel>();
             var id = 1;
 
-            using (var fs = File.OpenRead("questions.csv")) 
+            var fp = new ManifestEmbeddedFileProvider(typeof(StaticQuestionFactory).Assembly);
+            var fi = fp.GetFileInfo("questions.csv");
+            
+            using (var fs = fi.CreateReadStream()) 
             using (var sr = new StreamReader(fs,cfg.Encoding)) {
                 var cr = new CsvReader(sr, cfg);
                 while (cr.Read()) {

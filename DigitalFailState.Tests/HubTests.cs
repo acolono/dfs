@@ -47,7 +47,7 @@ namespace DigitalFailState.Tests
                 await connOther.StartAsync();
                 await conn.StartAsync();
                 
-                var pong = await conn.InvokeAsync<int>("Ping");
+                var pong = await conn.InvokeAsync<int>("Ping", -1);
                 Assert.IsTrue(pong == default(int));
 
                 var next = await conn.InvokeAsync<QuestionModel>("GetNextQuestion");

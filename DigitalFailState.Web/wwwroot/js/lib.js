@@ -5,6 +5,12 @@
 
 function goDownTo(nr, vm) {
     return new Promise(function (resolve, reject) {
+        var diff = Math.abs(vm.score - nr);
+        if (diff === 0) {
+            resolve();
+            return;
+        }
+        var delay = 3000 / diff;
         var iv = setInterval(() => {
             if (vm.score < nr) {
                 vm.score++;
@@ -14,26 +20,30 @@ function goDownTo(nr, vm) {
                 clearInterval(iv);
                 resolve();
             }
-        }, 120);
+        }, delay);
     });
 }
 
 function typeLetters(text, vm, property) {
     return new Promise(function (resolve, reject) {
-        vm[property] = "";
+        if (text === null || text === undefined || text.length < 1) {
+            resolve();
+            return;
+        }
         var letters = text.split("");
         var state = "";
+        var delay = 2000 / letters.length;
         var iv = setInterval(() => {
-            var nextLetter = letters.shift();
-            if (letters.length < 3) {
+            if (letters.length <= 1) {
                 vm[property] = text;
                 clearInterval(iv);
                 resolve();
             } else {
+                var nextLetter = letters.shift();
                 state += nextLetter;
                 vm[property] = state + "|";
             }
-        }, 35);
+        }, delay);
     });
 }
 
@@ -42,7 +52,6 @@ function wait(delay) {
         setTimeout(() => resolve(), delay);
     });
 }
-
 
 function setupPing(conn, vm) {
 

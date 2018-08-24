@@ -31,7 +31,7 @@ yes, no, question, conclusion, score, error {
     justify-content: center;
     align-items: center;
     text-align: center;
-    padding: 2rem;
+    padding: 2.5rem;
 }
 conclusion, score, error {pointer-events: none}
 
@@ -40,5 +40,5 @@ no {grid-area: no; background: red; background-image: linear-gradient(135deg, re
 question {grid-area: question}
 error { background: red; color: white;}
 conclusion, score, error {grid-area: 1/1/3/3}
-score, .score { font-size: 200%;}
+score, .score, yes, no { font-size: 200%; font-family: "Roboto Slab"}
 conclusion { flex-direction: column;}

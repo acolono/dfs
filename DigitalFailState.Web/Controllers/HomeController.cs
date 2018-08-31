@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using DigitalFailState.Web.Services;
+using Microsoft.Extensions.FileProviders;
 
 namespace DigitalFailState.Web.Controllers
 {
@@ -23,6 +24,14 @@ namespace DigitalFailState.Web.Controllers
         public IActionResult LegacyScore() {
             ViewBag.Score = _scoreProvider.GetScore();
             return View();
+        }
+
+        [HttpGet("/android-app")]
+        public IActionResult AndroidApp() {
+            var fp = new ManifestEmbeddedFileProvider(typeof(StaticQuestionFactory).Assembly);
+            var fi = fp.GetFileInfo("dfs.apk");
+            var stream = fi.CreateReadStream();
+            return File(stream, "application/vnd.android.package-archive", "dfs.apk");
         }
     }
 }

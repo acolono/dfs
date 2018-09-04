@@ -27,11 +27,16 @@ namespace DigitalFailState.Web.Controllers
         }
 
         [HttpGet("/android-app")]
-        public IActionResult AndroidApp() {
+        public IActionResult AndroidApp() => GetFile("dfs.apk");
+
+        [HttpGet("/debug/android-app")]
+        public IActionResult AndroidDebugApp() => GetFile("dfs-debug.apk");
+
+        private IActionResult GetFile(string fileName, string downloadName = null, string contentType = null) {
             var fp = new ManifestEmbeddedFileProvider(typeof(StaticQuestionFactory).Assembly);
-            var fi = fp.GetFileInfo("dfs.apk");
+            var fi = fp.GetFileInfo(fileName);
             var stream = fi.CreateReadStream();
-            return File(stream, "application/vnd.android.package-archive", "dfs.apk");
+            return File(stream, contentType ?? "application/vnd.android.package-archive", downloadName ?? fileName);
         }
     }
 }

@@ -11,3 +11,7 @@ services:
     ports:
       - 127.0.0.1:9272:80
     restart: always
+    volumes:
+      - storage:/app/storage
+volumes:
+  storage:

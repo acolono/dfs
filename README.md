@@ -1,0 +1,2 @@
+[![Badge](https://quay.io/repository/0xff/dfs/status "Badge")](https://quay.io/repository/0xff/dfs)
+[![Build Status](https://dev.azure.com/volatile-void/pipes/_apis/build/status/dfs)](https://dev.azure.com/volatile-void/pipes/_build/latest?definitionId=3)

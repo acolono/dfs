@@ -1,0 +1,79 @@
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+pool:
+  vmImage: 'Ubuntu 16.04'
+
+# Predefined variables: https://docs.microsoft.com/en-us/azure/devops/pipelines/build/variables
+variables:
+  buildConfiguration: 'Release'
+  buildBaseName: '$(Build.DefinitionName)-$(Build.SourceBranchName)'
+  dockerImageName: 'quay.io/0xff/dfs:$(Build.SourceVersion)'
+  dockerHostName: '$(buildBaseName).ci.p.887.at'
+  deployFolder: '/home/flo/docker/cicd/$(dockerHostName)'
+  productionHostName: 'dfs.com'
+
+steps:
+- script: env
+  displayName: Print environment
+
+# build container
+- task: Docker@1
+  displayName: 'Build docker image'
+  inputs:
+    imageName: $(dockerImageName)
+    buildContext: ./DigitalFailState.Web/
+
+# run tests
+- script: dotnet build --configuration $(buildConfiguration)
+  displayName: Build
+
+- script: dotnet test DigitalFailState.Tests/DigitalFailState.Tests.csproj --logger trx --collect "Code coverage"
+  displayName: Run tests
+
+- task: PublishTestResults@2
+  inputs:
+    testRunner: VSTest
+    testResultsFiles: '**/*.trx'
+
+# push container
+- task: Docker@1
+  displayName: Login to container registry
+  inputs:
+    containerregistrytype: 'Container Registry'
+    dockerRegistryEndpoint: '0xff@quay.io'
+    command: login
+
+- task: Docker@1
+  displayName: 'Push docker image'
+  inputs:
+    command: 'push'
+    imageName: $(dockerImageName)
+
+# publish
+- script: docker-compose -f stage.yml config > $(Build.ArtifactStagingDirectory)/docker-compose.yml
+  displayName: Build docker-compose.yml
+
+- script: docker-compose -f stage.yml bundle -o $(Build.ArtifactStagingDirectory)/stack.json
+  displayName: Build stack.json for docker swarm
+  env:
+    DOCKERHOSTNAME: $(productionHostName)
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact'
+  inputs:
+    PathtoPublish: '$(build.artifactstagingdirectory)'  
+
+# deploy    
+- task: CopyFilesOverSSH@0
+  inputs:
+    sshEndpoint: flo@p.887.at
+    sourceFolder: $(Build.ArtifactStagingDirectory)
+    targetFolder: $(deployFolder)
+
+- task: SSH@0
+  inputs:
+    sshEndpoint: flo@p.887.at
+    commands: /bin/bash -c "cd '$(deployFolder)' && docker-compose pull && docker-compose up -d" 2>&1

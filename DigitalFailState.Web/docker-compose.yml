@@ -15,3 +15,4 @@ services:
       - storage:/app/storage
 volumes:
   storage:
+  

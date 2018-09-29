@@ -1,0 +1,26 @@
+version: "2.3"
+
+volumes:
+  storage:
+
+services:
+  dfs:
+    image: ${DOCKERIMAGENAME}
+    hostname: ${DOCKERHOSTNAME}
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /var/run
+    restart: always
+    volumes:
+      - storage:/app/storage
+    networks:
+      - caddy_caddy
+    labels:
+      caddy.address: ${DOCKERHOSTNAME}
+      caddy.header /: Strict-Transport-Security "max-age=31536000;"'
+      caddy.proxy.websocket: transparent
+
+networks:
+  caddy_caddy:
+    external: true

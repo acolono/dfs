@@ -11,11 +11,13 @@ namespace DigitalFailState.Web.Services
     public class StorageService : IStorageService {
 
         private static readonly object Sync = new object();
-        private const string ScoreFile = "score.txt";
+        private const string ScoreFile = "storage/score.txt";
 
         public void SaveStore(long score) {
             try {
                 lock (Sync) {
+                    var dir = Path.GetDirectoryName(ScoreFile);
+                    if (!string.IsNullOrWhiteSpace(dir) && !Directory.Exists(dir)) Directory.CreateDirectory(dir);
                     File.WriteAllText(ScoreFile, score.ToString(), Encoding.UTF8);
                 }
             }

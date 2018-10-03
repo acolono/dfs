@@ -78,7 +78,7 @@ function setupPing(conn, vm) {
             error.style.opacity = 1;
             start();
         });
-    }, 10000);
+    }, 2000);
 
     conn.on("Restart", () => {
         window.location.reload(true);
